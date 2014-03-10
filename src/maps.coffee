@@ -2,13 +2,24 @@ map = null
 
 
 class CustomOverlay
-    constructor: ->
+    constructor: (@json_script) ->
         @features = []
 
     add: (obj) ->
-        @features.push new google.maps.Marker
-            position: new google.maps.LatLng(obj.coordinates.reverse()...)
-            title: obj.name
+        if obj.type == 'Point'
+            @features.push new google.maps.Marker
+                position: new google.maps.LatLng(obj.coords...)
+                title: obj.name
+        else if obj.type == 'Polygon'
+            @features.push new google.maps.Polygon
+                paths: [new google.maps.LatLng(ll...) for ll in obj.coords[0]]
+                title: obj.name
+
+    load: ->
+        self = @
+        $.getJSON @json_script, (json_data) ->
+            self.add(obj) for obj in json_data
+            self.show()
 
     show: ->
         feature.setMap(map) for feature in @features
@@ -17,11 +28,8 @@ class CustomOverlay
         feature.setMap(null) for feature in @features
 
 
-restaurants = new CustomOverlay()
-load_restaurants = ->
-    $.getJSON 'src/restaurants.php', (json_data) ->
-        restaurants.add(obj) for obj in json_data
-        restaurants.show()
+restaurants = new CustomOverlay('src/restaurants.php')
+obstacles = new CustomOverlay('src/obstacles.php')
 
 
 init_map = ->
@@ -32,6 +40,7 @@ init_map = ->
         maxZoom: 15
         mapTypeId: google.maps.MapTypeId.ROADMAP
         streetViewControl: false
-    load_restaurants()
+    restaurants.load()
+    obstacles.load()
 
 google.maps.event.addDomListener(window, 'load', init_map)

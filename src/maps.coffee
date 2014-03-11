@@ -36,9 +36,9 @@ class CustomOverlay
 
 
 overlays =
-    restaurants:  new CustomOverlay('src/restaurants.php')
-    obstacles:    new CustomOverlay('src/obstacles.php', '#333')
-    universities: new CustomOverlay('src/universities.php', '#009')
+    restaurants:  new CustomOverlay('src/model.php?t=restaurants')
+    obstacles:    new CustomOverlay('src/model.php?t=obstacles', '#333')
+    universities: new CustomOverlay('src/model.php?t=universities', '#009')
     heatmap:      new CustomOverlay('src/heatmap.php', '#090')
 
 

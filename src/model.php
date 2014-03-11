@@ -27,6 +27,14 @@ class Model {
 
 }
 
-$restaurants = new Model('restaurants');
-$obstacles = new Model('obstacles');
-$universities = new Model('universities');
+switch ($_GET['t']) {
+    case 'restaurants':
+    case 'obstacles':
+    case 'universities':
+        $obj = new Model($_GET['t']);
+        break;
+    default:
+        die(json_encode("table {$_GET['t']} not exists."));
+}
+
+exit(json_encode($obj->all()));

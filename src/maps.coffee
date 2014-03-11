@@ -41,9 +41,9 @@ overlays =
     universities: new CustomOverlay('src/overlay.php?t=universities', '#009')
 
 heatmaps =
-    rates:        new CustomOverlay('src/heatmap.php', '#090')
+    rates:        new CustomOverlay('src/heatmap.php', '#0a0')
     rest_density: new CustomOverlay('src/heatmap.php', '#900')
-    univ_density: new CustomOverlay('src/heatmap.php', '#009')
+    univ_density: new CustomOverlay('src/heatmap.php', '#00a')
 
 
 google.maps.event.addDomListener window, 'load', ->
@@ -77,7 +77,7 @@ $(document).ready ->
 
     $('#layer-selector input:radio').click ->
         heatmap.hide() for _, heatmap of heatmaps
-        heatmaps[$('input:radio[name=heatmap]:checked').val()].show()
+        heatmaps[$('input:radio[name=heatmap]:checked').val()]?.show()
 
     $('.close').click ->
         $(this).parent().hide()

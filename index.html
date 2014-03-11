@@ -9,13 +9,15 @@
   <body>
     <div id="menu-bar">
       <div id="title" class="padded">
-        <b>Chiang Mai Restaurants</b>
+        <h1>Chiang Mai Restaurants</h1>
       </div>
-      <div class="padded">
+      <div class="left padded">
+        <button id="layers">layers</button>
+      </div>
+      <div class="right padded">
         <input id="search-box" placeholder="find restaurants by name" />
         <button id="search">search</button>
         <button id="advance">advance</button>
-        <button id="layers">layers</button>
       </div>
     </div>
     <div id="contents">
@@ -47,6 +49,10 @@
           <li>
             <input type="radio" name="heatmap" value="univ_density" />
             Universities Density
+          </li>
+          <li>
+            <input type="radio" name="heatmap" value="none" />
+            -- none --
           </li>
         </ul>
       </div>

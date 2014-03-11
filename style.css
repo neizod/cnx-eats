@@ -1,3 +1,13 @@
+.left {
+    position: absolute;
+    left: 0px;
+}
+
+.right {
+    position: absolute;
+    right: 0px;
+}
+
 .padded {
     display: inline-block;
     padding: 8px;
@@ -33,16 +43,23 @@ html, body {
     width:  100%;
 }
 
-#title {
-    color: #ddd;
-}
-
 #menu-bar {
     position: absolute;
+    text-align: center;
     top:     0px;
     bottom: 42px;
     width:  100%;
     background-color: #333;
+}
+
+#title {
+    display: inline-block;
+    margin: auto;
+    color: #ddd;
+}
+#title h1 {
+    font-size: 100%;
+    margin: 0.5em 0em;
 }
 
 #contents {
@@ -67,7 +84,7 @@ html, body {
 
 #advance-search {
     top:     10px;
-    left:   400px;
+    right:  400px;
     width:  300px;
     height: 100px;
 }

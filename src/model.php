@@ -29,3 +29,4 @@ class Model {
 
 $restaurants = new Model('restaurants');
 $obstacles = new Model('obstacles');
+$universities = new Model('universities');

@@ -2,7 +2,7 @@ map = null
 
 
 class CustomOverlay
-    constructor: (@json_script) ->
+    constructor: (@json_script, @color) ->
         @features = []
 
     add: (obj) ->
@@ -14,6 +14,8 @@ class CustomOverlay
             @features.push new google.maps.Polygon
                 paths: [new google.maps.LatLng(ll...) for ll in obj.coords[0]]
                 title: obj.name
+                strokeColor: @color
+                fillColor: @color
 
     load: ->
         self = @
@@ -29,7 +31,8 @@ class CustomOverlay
 
 
 restaurants = new CustomOverlay('src/restaurants.php')
-obstacles = new CustomOverlay('src/obstacles.php')
+obstacles = new CustomOverlay('src/obstacles.php', '#333')
+universities = new CustomOverlay('src/universities.php', '#009')
 
 
 init_map = ->
@@ -42,5 +45,6 @@ init_map = ->
         streetViewControl: false
     restaurants.load()
     obstacles.load()
+    universities.load()
 
 google.maps.event.addDomListener(window, 'load', init_map)

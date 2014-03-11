@@ -1,6 +1,5 @@
 map = null
 
-
 class CustomOverlay
     constructor: (@json_script, @color) ->
         @features = []
@@ -29,6 +28,9 @@ class CustomOverlay
     hide: ->
         feature.setMap(null) for feature in @features
 
+    toggle: (bool) ->
+        if bool then @show() else @hide()
+
 
 restaurants = new CustomOverlay('src/restaurants.php')
 obstacles = new CustomOverlay('src/obstacles.php', '#333')
@@ -48,3 +50,14 @@ init_map = ->
     universities.load()
 
 google.maps.event.addDomListener(window, 'load', init_map)
+
+
+$(document).ready ->
+    $('#layer-selector').hide()
+
+    $('#layers').click ->
+        $('#layer-selector').toggle()
+
+    $('#layer-selector input[type=checkbox]').click ->
+        mapper = {restaurants, obstacles, universities}
+        mapper[this.value.split('-')[1]].toggle(this.checked)

@@ -1,3 +1,17 @@
+.padded {
+    padding: 8px;
+}
+
+ul.unbulleted {
+    padding: 0px;
+    margin:  0px;
+    list-style-type: none;
+}
+
+h3 {
+    margin: 0.5em 0em;
+}
+
 html, body {
     margin:  0px;
     padding: 0px;
@@ -24,4 +38,15 @@ html, body {
     width: 100%;
     height: 100%;
     background-color: #ccf;
+}
+
+#layer-selector {
+    position: absolute;
+    top:  10px;
+    left: 10px;
+    width:  200px;
+    height: 200px;
+    z-index: 1;
+    border: thick solid rgba(30, 30, 30, 0.7);
+    background-color: #ffe;
 }

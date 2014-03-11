@@ -19,11 +19,11 @@ class CustomOverlay
                 fillOpacity: obj.weight / 400 if obj.weight? # TODO
                 zIndex: if obj.weight? then 1 else 2
 
-    load: ->
+    load: (just_load=null) ->
         self = @
         $.getJSON @json_script, (json_data) ->
             self.add(obj) for obj in json_data
-            self.show()
+            self.show() unless just_load?
 
     show: ->
         feature.setMap(map) for feature in @features
@@ -36,10 +36,14 @@ class CustomOverlay
 
 
 overlays =
-    restaurants:  new CustomOverlay('src/model.php?t=restaurants')
-    obstacles:    new CustomOverlay('src/model.php?t=obstacles', '#333')
-    universities: new CustomOverlay('src/model.php?t=universities', '#009')
-    heatmap:      new CustomOverlay('src/heatmap.php', '#090')
+    restaurants:  new CustomOverlay('src/overlay.php?t=restaurants')
+    obstacles:    new CustomOverlay('src/overlay.php?t=obstacles', '#333')
+    universities: new CustomOverlay('src/overlay.php?t=universities', '#009')
+
+heatmaps =
+    rates:        new CustomOverlay('src/heatmap.php', '#090')
+    rest_density: new CustomOverlay('src/heatmap.php', '#900')
+    univ_density: new CustomOverlay('src/heatmap.php', '#009')
 
 
 google.maps.event.addDomListener window, 'load', ->
@@ -50,7 +54,8 @@ google.maps.event.addDomListener window, 'load', ->
         maxZoom: 17
         mapTypeId: google.maps.MapTypeId.ROADMAP
         streetViewControl: false
-    overlay.load() for _, overlay of overlays
+    overlay.load() for key, overlay of overlays
+    heatmap.load(key.match(/.*_density/)) for key, heatmap of heatmaps
 
 
 $(document).ready ->
@@ -67,8 +72,12 @@ $(document).ready ->
     $('#layers').click ->
         $('#layer-selector').show()
 
-    $('#layer-selector input[type=checkbox]').click ->
+    $('#layer-selector input:checkbox').click ->
         overlays[this.value].toggle(this.checked)
+
+    $('#layer-selector input:radio').click ->
+        heatmap.hide() for _, heatmap of heatmaps
+        heatmaps[$('input:radio[name=heatmap]:checked').val()].show()
 
     $('.close').click ->
         $(this).parent().hide()

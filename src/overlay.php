@@ -2,7 +2,7 @@
 
 require 'database.php';
 
-class Model {
+class Overlay {
 
     public function __construct($table) {
         global $db;
@@ -31,7 +31,7 @@ switch ($_GET['t']) {
     case 'restaurants':
     case 'obstacles':
     case 'universities':
-        $obj = new Model($_GET['t']);
+        $obj = new Overlay($_GET['t']);
         break;
     default:
         die(json_encode("table {$_GET['t']} not exists."));

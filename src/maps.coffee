@@ -15,6 +15,8 @@ class CustomOverlay
                 title: obj.name
                 strokeColor: @color
                 fillColor: @color
+                strokeOpacity: 0.1            if obj.weight?
+                fillOpacity: obj.weight / 400 if obj.weight? # TODO
 
     load: ->
         self = @
@@ -32,12 +34,14 @@ class CustomOverlay
         if bool then @show() else @hide()
 
 
-restaurants = new CustomOverlay('src/restaurants.php')
-obstacles = new CustomOverlay('src/obstacles.php', '#333')
-universities = new CustomOverlay('src/universities.php', '#009')
+overlays =
+    restaurants:  new CustomOverlay('src/restaurants.php')
+    obstacles:    new CustomOverlay('src/obstacles.php', '#333')
+    universities: new CustomOverlay('src/universities.php', '#009')
+    heatmap:      new CustomOverlay('src/heatmap.php', '#900')
 
 
-init_map = ->
+google.maps.event.addDomListener window, 'load', ->
     map = new google.maps.Map document.getElementById('map-canvas'),
         center: new google.maps.LatLng(18.7896457, 98.9939156)
         zoom: 13
@@ -45,11 +49,7 @@ init_map = ->
         maxZoom: 15
         mapTypeId: google.maps.MapTypeId.ROADMAP
         streetViewControl: false
-    restaurants.load()
-    obstacles.load()
-    universities.load()
-
-google.maps.event.addDomListener(window, 'load', init_map)
+    overlay.load() for _, overlay of overlays
 
 
 $(document).ready ->
@@ -59,5 +59,4 @@ $(document).ready ->
         $('#layer-selector').toggle()
 
     $('#layer-selector input[type=checkbox]').click ->
-        mapper = {restaurants, obstacles, universities}
-        mapper[this.value.split('-')[1]].toggle(this.checked)
+        overlays[this.value].toggle(this.checked)

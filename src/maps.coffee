@@ -17,6 +17,7 @@ class CustomOverlay
                 fillColor: @color
                 strokeOpacity: 0.1            if obj.weight?
                 fillOpacity: obj.weight / 400 if obj.weight? # TODO
+                zIndex: if obj.weight? then 1 else 2
 
     load: ->
         self = @
@@ -53,10 +54,18 @@ google.maps.event.addDomListener window, 'load', ->
 
 
 $(document).ready ->
+    $('#search-result').hide()
     $('#layer-selector').hide()
 
+    $('#search').click ->
+        # TODO do searching and fill result
+        $('#search-result').show()
+
     $('#layers').click ->
-        $('#layer-selector').toggle()
+        $('#layer-selector').show()
 
     $('#layer-selector input[type=checkbox]').click ->
         overlays[this.value].toggle(this.checked)
+
+    $('.close').click ->
+        $(this).parent().hide()

@@ -1,5 +1,19 @@
 .padded {
+    display: inline-block;
     padding: 8px;
+}
+
+.info-box {
+    position: absolute;
+    z-index: 1;
+    border: thick solid rgba(30, 30, 30, 0.7);
+    background-color: #ffe;
+}
+
+button.close {
+    position: absolute;
+    top:   4px;
+    right: 4px;
 }
 
 ul.unbulleted {
@@ -17,6 +31,10 @@ html, body {
     padding: 0px;
     height: 100%;
     width:  100%;
+}
+
+#title {
+    color: #ddd;
 }
 
 #menu-bar {
@@ -41,12 +59,16 @@ html, body {
 }
 
 #layer-selector {
-    position: absolute;
     top:  10px;
     left: 10px;
     width:  200px;
     height: 200px;
-    z-index: 1;
-    border: thick solid rgba(30, 30, 30, 0.7);
-    background-color: #ffe;
+}
+
+#search-result {
+    top:    10px;
+    bottom: 10px;
+    right:  10px;
+    width:  350px;
+    min-height: 200px;
 }

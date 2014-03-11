@@ -12,14 +12,15 @@
         <b>Chiang Mai Restaurants</b>
       </div>
       <div class="padded">
-        <input id="search-box" />
+        <input id="search-box" placeholder="find restaurants by name" />
         <button id="search">search</button>
+        <button id="advance">advance</button>
         <button id="layers">layers</button>
       </div>
     </div>
     <div id="contents">
       <div id="map-canvas"></div>
-      <div id="layer-selector" class="padded info-box">
+      <div id="layer-selector" class="prehide padded info-box">
         <button class="close">X</button>
         <h3>Visible Layers</h3>
         <ul class="unbulleted">
@@ -41,7 +42,25 @@
           </li>
         </ul>
       </div>
-      <div id="search-result" class="padded info-box">
+      <div id="advance-search" class="prehide padded info-box">
+        <button class="close">X</button>
+        <h3>Advance Search</h3>
+        <div>
+          <input type="radio" name="density-type" value="universities" />
+          University
+          <input type="radio" name="density-type" value="restaurants" />
+          Restaurants
+          <input type="radio" name="density-type" value="heatmap" />
+          Heatmap
+        </div>
+        <div>
+          <input name="density-min" placeholder="0" size="2" />
+          ≤ density ≤
+          <input name="density-max" placeholder="1" size="2" />
+          <button id="density-search">density search</button>
+        </div>
+      </div>
+      <div id="search-result" class="prehide padded info-box">
         <button class="close">X</button>
         <h3>Search Result</h3>
       </div>

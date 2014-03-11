@@ -39,27 +39,30 @@ overlays =
     restaurants:  new CustomOverlay('src/restaurants.php')
     obstacles:    new CustomOverlay('src/obstacles.php', '#333')
     universities: new CustomOverlay('src/universities.php', '#009')
-    heatmap:      new CustomOverlay('src/heatmap.php', '#900')
+    heatmap:      new CustomOverlay('src/heatmap.php', '#090')
 
 
 google.maps.event.addDomListener window, 'load', ->
     map = new google.maps.Map document.getElementById('map-canvas'),
         center: new google.maps.LatLng(18.7896457, 98.9939156)
         zoom: 13
-        minZoom: 10
-        maxZoom: 15
+        minZoom: 12
+        maxZoom: 17
         mapTypeId: google.maps.MapTypeId.ROADMAP
         streetViewControl: false
     overlay.load() for _, overlay of overlays
 
 
 $(document).ready ->
-    $('#search-result').hide()
-    $('#layer-selector').hide()
+    $('.prehide').hide()
 
     $('#search').click ->
         # TODO do searching and fill result
         $('#search-result').show()
+
+    $('#advance').click ->
+        # TODO do searching and fill result
+        $('#advance-search').show()
 
     $('#layers').click ->
         $('#layer-selector').show()

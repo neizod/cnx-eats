@@ -36,14 +36,14 @@ class CustomOverlay
 
 
 overlays =
-    restaurants:  new CustomOverlay('src/overlay.php?t=restaurants')
-    obstacles:    new CustomOverlay('src/overlay.php?t=obstacles', '#333')
-    universities: new CustomOverlay('src/overlay.php?t=universities', '#009')
+    restaurants:  new CustomOverlay('overlay.php?t=restaurants')
+    obstacles:    new CustomOverlay('overlay.php?t=obstacles', '#333')
+    universities: new CustomOverlay('overlay.php?t=universities', '#009')
 
 heatmaps =
-    rates:        new CustomOverlay('src/heatmap.php', '#0a0')
-    rest_density: new CustomOverlay('src/heatmap.php', '#900')
-    univ_density: new CustomOverlay('src/heatmap.php', '#00a')
+    rates:        new CustomOverlay('heatmap.php', '#0a0')
+    rest_density: new CustomOverlay('heatmap.php', '#900')
+    univ_density: new CustomOverlay('heatmap.php', '#00a')
 
 
 google.maps.event.addDomListener window, 'load', ->

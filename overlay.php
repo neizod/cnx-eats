@@ -15,14 +15,28 @@ class Overlay {
         global $db;
         $this->table = $table;
         $this->db = $db;
+        $this->init_sql();
     }
 
-    public function all($ret=array()) {
-        $res = $this->db->query("
+    private function init_sql() {
+        $this->binding = array();
+        $this->sql = "
             SELECT *,
                    ST_AsGeoJSON(ST_FlipCoordinates(the_geom)) as geojson
             FROM   {$this->table}
-        ");
+        ";
+    }
+
+    public function cond($cond, $val) {
+        $this->sql .= ' '.$cond;
+        $this->binding[] = $val;
+        return $this;
+    }
+
+    public function get() {
+        $ret = array();
+        $res = $this->db->prepare($this->sql);
+        $res->execute($this->binding);
         foreach ($res as $row) {
             if (isset($row['weight']) and $row['weight'] == 0) continue;
             $obj = json_decode($row['geojson']);
@@ -31,7 +45,16 @@ class Overlay {
             $obj->weight = $row['weight'];
             $ret[] = $obj;
         }
+        $this->init_sql();
         return $ret;
+    }
+
+    public function all() {
+        return $this->get();
+    }
+
+    public function search_name($name) {
+        return $this->cond('WHERE name ILIKE ?', "%$name%")->get();
     }
 
 }
@@ -50,11 +73,18 @@ switch ($_GET['t']) {
         die(json_encode(array(
             'error' => 'please supply arguments and call with get method.',
             'require_arguments' => array(
-                't' => 'table name to query'
+                't' => 'table name to query',
+            ),
+            'optional_arguments' => array(
+                'n' => 'search by name',
             ),
         )));
     default:
         die(json_encode(array('error' => "table '{$_GET['t']}' not exists.")));
 }
 
-exit(json_encode($obj->all()));
+if (!empty($_GET['namelike'])) {
+    exit(json_encode($obj->search_name($_GET['namelike'])));
+} else {
+    exit(json_encode($obj->all()));
+}

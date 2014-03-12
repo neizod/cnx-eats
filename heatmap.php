@@ -17,10 +17,10 @@ class Heatmap {
             FROM   {$this->table}
         ");
         foreach ($res as $row) {
-            if ($row['PNTCNT'] == 0) continue;
+            if ($row['weight'] == 0) continue;
             $obj = json_decode($row['geojson']);
             $obj->coords = $obj->coordinates; unset($obj->coordinates);
-            $obj->weight = $row['PNTCNT'];
+            $obj->weight = $row['weight'];
             $ret[] = $obj;
         }
         return $ret;
@@ -28,5 +28,14 @@ class Heatmap {
 
 }
 
-$heatmap = new Heatmap('sample_heat');
-echo json_encode($heatmap->all());
+switch ($_GET['t']) {
+    case 'sample_heat':
+    case 'rest_density':
+    case 'univ_density':
+        $obj = new Heatmap($_GET['t']);
+        break;
+    default:
+        die(json_encode("table {$_GET['t']} not exists."));
+}
+
+exit(json_encode($obj->all()));

@@ -41,9 +41,9 @@ overlays =
     universities: new CustomOverlay('overlay.php?t=universities', '#009')
 
 heatmaps =
-    rates:        new CustomOverlay('heatmap.php?t=sample_heat', '#0a0')
-    rest_density: new CustomOverlay('heatmap.php?t=rest_density', '#900')
-    univ_density: new CustomOverlay('heatmap.php?t=univ_density', '#00a')
+    rates:        new CustomOverlay('overlay.php?t=sample_heat', '#0a0')
+    rest_density: new CustomOverlay('overlay.php?t=rest_density', '#900')
+    univ_density: new CustomOverlay('overlay.php?t=univ_density', '#00a')
 
 
 google.maps.event.addDomListener window, 'load', ->

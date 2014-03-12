@@ -1,6 +1,13 @@
 <?php
 
-require 'database.php';
+
+$db = new PDO('pgsql:
+    dbname   = gis
+    port     = 5433
+    user     = gman
+    password = whatawonderfulworld!?
+') or die(json_encode(array('error' => 'could not connect database')));
+
 
 class Overlay {
 
@@ -39,8 +46,15 @@ switch ($_GET['t']) {
     case 'univ_density':
         $obj = new Overlay($_GET['t']);
         break;
+    case '':
+        die(json_encode(array(
+            'error' => 'please supply arguments and call with get method.',
+            'require_arguments' => array(
+                't' => 'table name to query'
+            ),
+        )));
     default:
-        die(json_encode("table {$_GET['t']} not exists."));
+        die(json_encode(array('error' => "table '{$_GET['t']}' not exists.")));
 }
 
 exit(json_encode($obj->all()));

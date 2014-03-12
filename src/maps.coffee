@@ -1,7 +1,7 @@
 map = null
 
 class CustomOverlay
-    constructor: (@json_script, @color) ->
+    constructor: (@json_script, @color, @neg_color) ->
         @features = []
 
     add: (obj) ->
@@ -13,10 +13,10 @@ class CustomOverlay
             @features.push new google.maps.Polygon
                 paths: [new google.maps.LatLng(ll...) for ll in obj.coords[0]]
                 title: obj.name
-                strokeColor: @color
-                fillColor: @color
-                strokeOpacity: 0.1            if obj.weight?
-                fillOpacity: obj.weight / 100 if obj.weight?
+                strokeColor: if obj?.weight > 0 then @color else @neg_color
+                fillColor:   if obj?.weight > 0 then @color else @neg_color
+                strokeOpacity: 0.1                        if obj.weight?
+                fillOpacity:   Math.abs(obj.weight / 100) if obj.weight?
                 zIndex: if obj.weight? then 1 else 2
 
     load: (just_load=null) ->
@@ -41,7 +41,7 @@ overlays =
     universities: new CustomOverlay('overlay.php?t=universities', '#009')
 
 heatmaps =
-    rates:        new CustomOverlay('overlay.php?t=sample_heat', '#0a0')
+    rates:        new CustomOverlay('overlay.php?t=sample_heat', '#0a0', '#aa0')
     rest_density: new CustomOverlay('overlay.php?t=rest_density', '#900')
     univ_density: new CustomOverlay('overlay.php?t=univ_density', '#00a')
 

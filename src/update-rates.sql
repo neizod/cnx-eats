@@ -2,7 +2,7 @@ UPDATE land_rates
 SET    weight = sub.weight
 FROM   (
     SELECT gid,
-           u.weight - r.weight AS weight
+           u.weight - 1.4 * r.weight AS weight
     FROM   univ_density AS u
     JOIN   rest_density AS r
     USING  (gid)

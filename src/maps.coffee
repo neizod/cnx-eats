@@ -24,6 +24,7 @@ class CustomOverlay
             @features.push new google.maps.Marker
                 gid: obj.gid
                 title: obj.name
+                url: "http://foursquare.com/v/#{obj.fsq_id}" if obj?.fsq_id
                 position: new google.maps.LatLng(obj.coords...)
                 icon: icon(@star_icon)
                 zIndex: if @star_icon? then 2 else 1
@@ -96,11 +97,13 @@ show_search_result = ->
         lng = feature.getPosition().lng()
         block_info = "Block ID #{feature.gid}, weight #{feature.weight}"
         $('#search-result ol').append $('<li>').html [
-            $('<b>').addClass('find-me')
-                    .data('latlng', [lat, lng])
-                    .html(feature.title or block_info)
+            $('<a>').attr('href', feature?.url)
+                    .attr('target', '_blank')
+                    .html($('<b>').html(feature.title or block_info))
             $('<br>')
             $('<span>').addClass('unimportant')
+                       .addClass('find-me')
+                       .data('latlng', [lat, lng])
                        .html("@ #{lat.toFixed(8)}, #{lng.toFixed(8)}")
         ]
     $('.find-me').click ->

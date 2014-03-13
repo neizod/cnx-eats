@@ -13,6 +13,10 @@
     padding: 8px;
 }
 
+.find-me {
+    cursor: pointer;
+}
+
 .info-box {
     position: absolute;
     z-index: 1;
@@ -30,6 +34,10 @@ ul.unbulleted {
     padding: 0px;
     margin:  0px;
     list-style-type: none;
+}
+
+li {
+    margin-bottom: 0.5em;
 }
 
 h3 {
@@ -83,7 +91,7 @@ html, body {
     top:     10px;
     left:    10px;
     width:  200px;
-    height: 200px;
+    height: 250px;
 }
 
 #advance-search {

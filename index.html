@@ -60,17 +60,17 @@
         <button class="close">X</button>
         <h3>Advance Search</h3>
         <div>
-          <input type="radio" name="density-type" value="universities" />
+          <input type="radio" name="density-type" value="univ_density" />
           University
-          <input type="radio" name="density-type" value="restaurants" />
+          <input type="radio" name="density-type" value="rest_density" />
           Restaurants
-          <input type="radio" name="density-type" value="heatmap" />
-          Heatmap
+          <input type="radio" name="density-type" value="sample_heat" checked />
+          Land Rates
         </div>
         <div>
-          <input name="density-min" placeholder="0" size="2" />
+          <input id="density-lower" placeholder="-1.0" size="3" />
           ≤ density ≤
-          <input name="density-max" placeholder="1" size="2" />
+          <input id="density-upper" placeholder="+1.0" size="3" />
           <button id="density-search">density search</button>
         </div>
       </div>

@@ -7,8 +7,16 @@ google.maps.Polygon::getPosition = ->
     bounds.getCenter()
 
 
+icon = (star=null) ->
+    'https://chart.googleapis.com/chart?' +
+        if star?
+            'chst=d_map_xpin_icon&chld=pin_star|restaurant|0ff|ff0'
+        else
+            'chst=d_map_pin_icon&chld=restaurant|ac0'
+
+
 class CustomOverlay
-    constructor: (@get_data, @color, @neg_color) ->
+    constructor: (@get_data, @color, @neg_color, @star_icon) ->
         @features = []
 
     add: (obj) ->
@@ -17,6 +25,8 @@ class CustomOverlay
                 gid: obj.gid
                 title: obj.name
                 position: new google.maps.LatLng(obj.coords...)
+                icon: icon(@star_icon)
+                zIndex: if @star_icon? then 2 else 1
         else if obj.type == 'Polygon'
             @features.push new google.maps.Polygon
                 gid: obj.gid
@@ -54,11 +64,12 @@ class CustomOverlay
         if bool then @show() else @hide()
 
 
+
 overlays =
     restaurants:  new CustomOverlay({t: 'restaurants'})
     obstacles:    new CustomOverlay({t: 'obstacles'}, '#333')
     universities: new CustomOverlay({t: 'universities'}, '#009')
-    search:       new CustomOverlay(null, '#a0a', '#00a') # TODO repick color
+    search:       new CustomOverlay(null, '#a0a', '#00a', true) # TODO repick color
 
 heatmaps =
     rates:        new CustomOverlay({t: 'sample_heat'}, '#0a0', '#aa0')

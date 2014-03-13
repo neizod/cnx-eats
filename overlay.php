@@ -27,34 +27,43 @@ class Overlay {
         ";
     }
 
-    public function cond($cond, $val) {
+    private function cond($cond, $val) {
         $this->sql .= ' '.$cond;
-        $this->binding[] = $val;
+        if (array_key_exists('val', get_defined_vars())) {
+            $this->binding[] = $val;
+        }
         return $this;
     }
 
-    public function get() {
-        $ret = array();
+    private function get() {
         $res = $this->db->prepare($this->sql);
         $res->execute($this->binding);
         foreach ($res as $row) {
             if (isset($row['weight']) and $row['weight'] == 0) continue;
             $obj = json_decode($row['geojson']);
+            $obj->gid = $row['gid'];
             $obj->name = $row['name'];
             $obj->coords = $obj->coordinates; unset($obj->coordinates);
             $obj->weight = $row['weight'];
             $ret[] = $obj;
         }
         $this->init_sql();
-        return $ret;
+        return $ret ?: array();
     }
 
     public function all() {
         return $this->get();
     }
 
-    public function search_name($name) {
+    public function name_like($name) {
         return $this->cond('WHERE name ILIKE ?', "%$name%")->get();
+    }
+
+    public function in_range($lower, $upper) {
+        return $this->cond('WHERE weight >= ?', 100 * $lower ?: -100)
+                    ->cond('AND   weight <= ?', 100 * $upper ?: +100)
+                    ->cond('ORDER BY weight DESC')
+                    ->get();
     }
 
 }
@@ -83,8 +92,11 @@ switch ($_GET['t']) {
         die(json_encode(array('error' => "table '{$_GET['t']}' not exists.")));
 }
 
-if (!empty($_GET['namelike'])) {
-    exit(json_encode($obj->search_name($_GET['namelike'])));
+
+if (isset($_GET['namelike'])) {
+    exit(json_encode($obj->name_like($_GET['namelike'])));
+} else if (isset($_GET['lower']) or isset($_GET['upper'])) {
+    exit(json_encode($obj->in_range($_GET['lower'], $_GET['upper'])));
 } else {
     exit(json_encode($obj->all()));
 }

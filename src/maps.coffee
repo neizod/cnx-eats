@@ -1,18 +1,27 @@
 map = null
 
+
+google.maps.Polygon::getPosition = ->
+    bounds = new google.maps.LatLngBounds()
+    @getPath().forEach (points, _) -> bounds.extend(points)
+    bounds.getCenter()
+
+
 class CustomOverlay
-    constructor: (@json_script, @color, @neg_color) ->
+    constructor: (@get_data, @color, @neg_color) ->
         @features = []
 
     add: (obj) ->
         if obj.type == 'Point'
             @features.push new google.maps.Marker
-                position: new google.maps.LatLng(obj.coords...)
+                gid: obj.gid
                 title: obj.name
+                position: new google.maps.LatLng(obj.coords...)
         else if obj.type == 'Polygon'
             @features.push new google.maps.Polygon
-                paths: [new google.maps.LatLng(ll...) for ll in obj.coords[0]]
+                gid: obj.gid
                 title: obj.name
+                paths: [new google.maps.LatLng(ll...) for ll in obj.coords[0]]
                 strokeColor: if obj?.weight < 0 then @neg_color else @color
                 fillColor:   if obj?.weight < 0 then @neg_color else @color
                 strokeOpacity: 0.1                        if obj.weight?
@@ -20,16 +29,16 @@ class CustomOverlay
                 zIndex: if obj.weight? then 1 else 2
 
     load: (just_load=null, after=null) ->
-        return unless @json_script?
+        return unless @get_data?
         self = @
-        $.getJSON @json_script, (json_data) ->
+        $.getJSON 'overlay.php', @get_data, (json_data) ->
             self.add(obj) for obj in json_data
             self.show() unless just_load?
             after?()
 
-    reload: (@json_script=@json_script, after=null) ->
+    reload: (@get_data=@get_data, after=null) ->
         @empty()
-        @load(false, after)
+        @load(null, after)
 
     empty: ->
         @hide()
@@ -46,15 +55,15 @@ class CustomOverlay
 
 
 overlays =
-    restaurants:  new CustomOverlay('overlay.php?t=restaurants')
-    obstacles:    new CustomOverlay('overlay.php?t=obstacles', '#333')
-    universities: new CustomOverlay('overlay.php?t=universities', '#009')
-    search:       new CustomOverlay(null) # TODO pick color for it
+    restaurants:  new CustomOverlay({t: 'restaurants'})
+    obstacles:    new CustomOverlay({t: 'obstacles'}, '#333')
+    universities: new CustomOverlay({t: 'universities'}, '#009')
+    search:       new CustomOverlay(null, '#a0a', '#00a') # TODO repick color
 
 heatmaps =
-    rates:        new CustomOverlay('overlay.php?t=sample_heat', '#0a0', '#aa0')
-    rest_density: new CustomOverlay('overlay.php?t=rest_density', '#900')
-    univ_density: new CustomOverlay('overlay.php?t=univ_density', '#00a')
+    rates:        new CustomOverlay({t: 'sample_heat'}, '#0a0', '#aa0')
+    rest_density: new CustomOverlay({t: 'rest_density'}, '#900')
+    univ_density: new CustomOverlay({t: 'univ_density'}, '#00a')
 
 
 google.maps.event.addDomListener window, 'load', ->
@@ -68,6 +77,25 @@ google.maps.event.addDomListener window, 'load', ->
     heatmap.load(key.match(/.*_density/)) for key, heatmap of heatmaps
 
 
+show_search_result = ->
+    $('#search-result ol').empty()
+    for feature in overlays.search.features
+        lat = feature.getPosition().lat()
+        lng = feature.getPosition().lng()
+        $('#search-result ol').append $('<li>').html [
+            $('<b>').addClass('find-me')
+                    .data('latlng', [lat, lng])
+                    .html(feature.title or "Block ID #{feature.gid}")
+            $('<br>')
+            $('<span>').addClass('unimportant')
+                       .html("@ #{lat}, #{lng}")
+        ]
+    $('.find-me').click ->
+        map.panTo(new google.maps.LatLng($(@).data('latlng')...))
+        map.setZoom(17)
+    $('#search-dialog').show()
+
+
 $(document).ready ->
     $('.prehide').hide()
     $('#search-box').focus()
@@ -76,28 +104,22 @@ $(document).ready ->
         $('#search').click() if event.keyCode == 13
 
     $('#search').click ->
-        name = encodeURIComponent($('#search-box').val())
-        overlays.search.reload "overlay.php?t=restaurants&namelike=#{name}", ->
-            $('#search-result ol').empty()
-            for feature in overlays.search.features
-                lat = feature.position.lat()
-                lng = feature.position.lng()
-                $('#search-result ol').append $('<li>').html [
-                    $('<b>').addClass('find-me')
-                            .data('latlng', [lat, lng])
-                            .html(feature.title)
-                    $('<br>')
-                    $('<span>').addClass('unimportant')
-                               .html("@ #{lat}, #{lng}")
-                ]
-            $('.find-me').click ->
-                map.panTo(new google.maps.LatLng($(@).data('latlng')...))
-                map.setZoom(17)
-            $('#search-dialog').show()
+        get_data =
+            t: 'restaurants'
+            namelike: $('#search-box').val()
+        overlays.search.reload(get_data, show_search_result)
 
     $('#advance').click ->
-        # TODO do searching and fill result
         $('#advance-search').toggle()
+
+    $('#density-search').click ->
+        get_data =
+            t: $('input:radio[name=density-type]:checked').val()
+            lower: $('#density-lower').val()
+            upper: $('#density-upper').val()
+        $('#layer-selector input:radio[value=none]').click()
+        heatmap.hide() for _, heatmap of heatmaps
+        overlays.search.reload(get_data, show_search_result)
 
     $('#layers').click ->
         $('#layer-selector').toggle()

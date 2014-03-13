@@ -73,7 +73,7 @@ switch ($_GET['t']) {
     case 'restaurants':
     case 'obstacles':
     case 'universities':
-    case 'sample_heat':
+    case 'land_rates':
     case 'rest_density':
     case 'univ_density':
         $obj = new Overlay($_GET['t']);

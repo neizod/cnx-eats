@@ -72,7 +72,7 @@ overlays =
     search:       new CustomOverlay(null, '#a0a', '#00a', true) # TODO repick color
 
 heatmaps =
-    rates:        new CustomOverlay({t: 'sample_heat'}, '#0a0', '#aa0')
+    rates:        new CustomOverlay({t: 'land_rates'}, '#0a0', '#aa0')
     rest_density: new CustomOverlay({t: 'rest_density'}, '#900')
     univ_density: new CustomOverlay({t: 'univ_density'}, '#00a')
 
@@ -144,3 +144,6 @@ $(document).ready ->
 
     $('.close').click ->
         $(this).parent().hide()
+
+    $('#search-dialog .close').click ->
+        overlays.search.hide()

@@ -32,11 +32,12 @@ class CustomOverlay
                 gid: obj.gid
                 title: obj.name
                 paths: [new google.maps.LatLng(ll...) for ll in obj.coords[0]]
-                strokeColor: if obj?.weight < 0 then @neg_color else @color
-                fillColor:   if obj?.weight < 0 then @neg_color else @color
-                strokeOpacity: 0.1                        if obj.weight?
-                fillOpacity:   Math.abs(obj.weight / 100) if obj.weight?
-                zIndex: if obj.weight? then 1 else 2
+                weight: obj?.weight
+                strokeColor: if +obj?.weight < 0 then @neg_color else @color
+                fillColor:   if +obj?.weight < 0 then @neg_color else @color
+                strokeOpacity: 0.1                        if obj?.weight
+                fillOpacity:   Math.abs(obj.weight / 1.1) if obj?.weight
+                zIndex: if obj?.weight then 1 else 2
 
     load: (just_load=null, after=null) ->
         return unless @get_data?
@@ -69,10 +70,10 @@ overlays =
     restaurants:  new CustomOverlay({t: 'restaurants'})
     obstacles:    new CustomOverlay({t: 'obstacles'}, '#333')
     universities: new CustomOverlay({t: 'universities'}, '#009')
-    search:       new CustomOverlay(null, '#a0a', '#00a', true) # TODO repick color
+    search:       new CustomOverlay(null, '#0aa', '#a0a', true)
 
 heatmaps =
-    rates:        new CustomOverlay({t: 'land_rates'}, '#0a0', '#aa0')
+    land_rates:   new CustomOverlay({t: 'land_rates'}, '#0a0', '#aa0')
     rest_density: new CustomOverlay({t: 'rest_density'}, '#900')
     univ_density: new CustomOverlay({t: 'univ_density'}, '#00a')
 
@@ -93,13 +94,14 @@ show_search_result = ->
     for feature in overlays.search.features
         lat = feature.getPosition().lat()
         lng = feature.getPosition().lng()
+        block_info = "Block ID #{feature.gid}, weight #{feature.weight}"
         $('#search-result ol').append $('<li>').html [
             $('<b>').addClass('find-me')
                     .data('latlng', [lat, lng])
-                    .html(feature.title or "Block ID #{feature.gid}")
+                    .html(feature.title or block_info)
             $('<br>')
             $('<span>').addClass('unimportant')
-                       .html("@ #{lat}, #{lng}")
+                       .html("@ #{lat.toFixed(8)}, #{lng.toFixed(8)}")
         ]
     $('.find-me').click ->
         map.panTo(new google.maps.LatLng($(@).data('latlng')...))

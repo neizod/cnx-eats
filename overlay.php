@@ -60,8 +60,8 @@ class Overlay {
     }
 
     public function in_range($lower, $upper) {
-        return $this->cond('WHERE weight >= ?', 100 * $lower ?: -100)
-                    ->cond('AND   weight <= ?', 100 * $upper ?: +100)
+        return $this->cond('WHERE weight >= ?', $lower ?: -1)
+                    ->cond('AND   weight <= ?', $upper ?: +1)
                     ->cond('ORDER BY weight DESC')
                     ->get();
     }

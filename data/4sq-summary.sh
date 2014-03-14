@@ -4,5 +4,5 @@
 oldest=$(ls -1 raw-data/ | head -n 1)
 newest=$(ls -1 -r raw-data/ | head -n 1)
 
-paste raw-data/{$oldest,$newest} |
+paste raw-checkins/{$oldest,$newest} |
     awk 'BEGIN{OFS="\t"} {print "- "$1, $4-$2}' > RESTAURANTS.md

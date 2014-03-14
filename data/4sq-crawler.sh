@@ -13,4 +13,4 @@ do
         python -m json.tool |
         grep checkinsCount |
         grep -o '[0-9]\+'
-done < RESTAURANTS.md | tee "raw-data/$(date +chkins-%Y-%m-%d.log)" | nl
+done < RESTAURANTS.md | tee "raw-checkins/$(date +chkins-%Y-%m-%d.log)" | nl

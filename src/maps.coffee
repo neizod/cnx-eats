@@ -43,7 +43,8 @@ class CustomOverlay
     load: (just_load=null, after=null) ->
         return unless @get_data?
         self = @
-        $.getJSON 'overlay.php', @get_data, (json_data) ->
+        $.getJSON 'overlay.php', @get_data, (json_data, _, meta_data) ->
+            return if meta_data.status != 200
             self.add(obj) for obj in json_data
             self.show() unless just_load?
             after?()

@@ -6,7 +6,9 @@ $db = new PDO('pgsql:
     port     = 5433
     user     = gman
     password = whatawonderfulworld!?
-') or die(json_encode(array('error' => 'could not connect database')));
+') or http_response_code(503) and die(json_encode(array(
+    'error' => 'could not connect database'
+)));
 
 
 class Overlay {
@@ -80,6 +82,7 @@ switch ($_GET['t']) {
         $obj = new Overlay($_GET['t']);
         break;
     case '':
+        http_response_code(400);
         die(json_encode(array(
             'error' => 'please supply arguments and call with get method.',
             'require_arguments' => array(
@@ -90,14 +93,18 @@ switch ($_GET['t']) {
             ),
         )));
     default:
+        http_response_code(400);
         die(json_encode(array('error' => "table '{$_GET['t']}' not exists.")));
 }
 
 
 if (isset($_GET['namelike'])) {
+    http_response_code(200);
     exit(json_encode($obj->name_like($_GET['namelike'])));
 } else if (isset($_GET['lower']) or isset($_GET['upper'])) {
+    http_response_code(200);
     exit(json_encode($obj->in_range($_GET['lower'], $_GET['upper'])));
 } else {
+    http_response_code(200);
     exit(json_encode($obj->all()));
 }

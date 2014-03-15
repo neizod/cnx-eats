@@ -125,12 +125,26 @@ show_search_result = ->
     $('#search-dialog').show()
 
 
+$(document).keydown (event) ->
+    if event.which == 27 # esc
+        if $('#search-box:focus').length
+            $('#search-box').blur()
+        else
+            info_window.close()
+
+$(document).keypress (event) ->
+    unless $('#search-box:focus').length
+        if event.which == 47 # /
+            $('#search-box').focus()
+        event.preventDefault()
+
+
 $(document).ready ->
     $('.prehide').hide()
     $('#search-box').focus()
 
     $('#search-box').keydown (event) ->
-        $('#search').click() if event.keyCode == 13
+        $('#search').click() if event.keyCode == 13 # enter
 
     $('#search').click ->
         get_data =

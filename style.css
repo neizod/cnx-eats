@@ -8,6 +8,10 @@
     right: 0px;
 }
 
+.center {
+    text-align: center;
+}
+
 .padded {
     display: inline-block;
     padding: 8px;
@@ -97,8 +101,8 @@ html, body {
 #advance-search {
     top:     10px;
     right:  400px;
-    width:  300px;
-    height: 100px;
+    width:  320px;
+    height: 160px;
 }
 
 #search-dialog {

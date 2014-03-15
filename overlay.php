@@ -46,6 +46,8 @@ class Overlay {
             $obj->gid = $row['gid'];
             $obj->name = $row['name'];
             $obj->fsq_id = $row['fsq_id'];
+            $obj->chkins = $row['chkins'];
+            $obj->people = $row['people'];
             $obj->coords = $obj->coordinates; unset($obj->coordinates);
             $obj->weight = $row['weight'];
             $ret[] = $obj;

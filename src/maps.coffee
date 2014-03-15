@@ -1,4 +1,5 @@
 map = null
+info_window = new google.maps.InfoWindow()
 
 
 google.maps.Polygon::getPosition = ->
@@ -21,24 +22,35 @@ class CustomOverlay
 
     add: (obj) ->
         if obj.type == 'Point'
-            @features.push new google.maps.Marker
+            marker = new google.maps.Marker
                 gid: obj.gid
                 title: obj.name
                 url: "http://foursquare.com/v/#{obj.fsq_id}" if obj?.fsq_id
+                chkins: obj?.chkins
                 position: new google.maps.LatLng(obj.coords...)
                 icon: icon(@star_icon)
                 zIndex: if @star_icon? then 2 else 1
         else if obj.type == 'Polygon'
-            @features.push new google.maps.Polygon
+            marker = new google.maps.Polygon
                 gid: obj.gid
-                title: obj.name
+                title: if obj?.name then obj.name else "Block ##{obj.gid}"
                 paths: [new google.maps.LatLng(ll...) for ll in obj.coords[0]]
+                people: obj?.people
                 weight: obj?.weight
                 strokeColor: if +obj?.weight < 0 then @neg_color else @color
                 fillColor:   if +obj?.weight < 0 then @neg_color else @color
-                strokeOpacity: 0.1                        if obj?.weight
-                fillOpacity:   Math.abs(obj.weight / 1.1) if obj?.weight
+                strokeOpacity: 0.1                        if obj.weight?
+                fillOpacity:   Math.abs(obj.weight / 1.1) if obj.weight?
                 zIndex: if obj?.weight then 1 else 2
+        @features.push(marker)
+        google.maps.event.addListener marker, 'click', ->
+            info_window.setContent $('<div>').html([
+                $('<h3>').html(marker.title)
+                $('<p>').html("weight: #{marker.weight}")    if marker.weight?
+                $('<p>').html("check-ins: #{marker.chkins}") if marker.chkins?
+                $('<p>').html("students: #{marker.people}")  if marker.people?
+            ]).html()
+            info_window.open(map, marker)
 
     load: (just_load=null, after=null) ->
         return unless @get_data?
@@ -65,7 +77,6 @@ class CustomOverlay
 
     toggle: (bool) ->
         if bool then @show() else @hide()
-
 
 
 overlays =
@@ -96,11 +107,12 @@ show_search_result = ->
     for feature in overlays.search.features
         lat = feature.getPosition().lat()
         lng = feature.getPosition().lng()
-        block_info = "Block ID #{feature.gid}, weight #{feature.weight}"
+        search_item_title = feature.title
+        search_item_title += ", weight #{feature.weight}" if feature?.weight
         $('#search-result ol').append $('<li>').html [
             $('<a>').attr('href', feature?.url)
                     .attr('target', '_blank')
-                    .html($('<b>').html(feature.title or block_info))
+                    .html($('<b>').html(search_item_title))
             $('<br>')
             $('<span>').addClass('unimportant')
                        .addClass('find-me')

@@ -48,4 +48,4 @@ Populate Database with Provided Data
 
 Load data tables from dump database.
 
-    psql -U gman gis -f dump.sql
+    psql -U gman gis -f gis-data-dump.sql

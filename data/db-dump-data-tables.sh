@@ -8,4 +8,4 @@ pg_dump -U gman gis \
         -t rest_density \
         -t univ_density \
         -t land_rates \
-    > out-dump.sql
+    > gis-data-dump.sql

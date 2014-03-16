@@ -55,7 +55,7 @@ class CustomOverlay
     load: (just_load=null, after=null) ->
         return unless @get_data?
         self = @
-        $.getJSON 'overlay.php', @get_data, (json_data, _, meta_data) ->
+        $.getJSON "static/#{@get_data.t}.json", (json_data, _, meta_data) ->
             return if meta_data.status != 200
             self.add(obj) for obj in json_data
             self.show() unless just_load?
@@ -147,6 +147,7 @@ $(document).ready ->
         $('#search').click() if event.keyCode == 13 # enter
 
     $('#search').click ->
+        return alert 'Sorry, search unavailable when hosted on github. :('
         get_data =
             t: 'restaurants'
             namelike: $('#search-box').val()
@@ -156,6 +157,7 @@ $(document).ready ->
         $('#advance-search').toggle()
 
     $('#density-search').click ->
+        return alert 'Sorry, search unavailable when hosted on github. :('
         get_data =
             t: $('input:radio[name=density-type]:checked').val()
             lower: $('#density-lower').val()

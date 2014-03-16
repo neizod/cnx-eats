@@ -136,7 +136,7 @@ $(document).keypress (event) ->
     unless $('#search-box:focus').length
         if event.which == 47 # /
             $('#search-box').focus()
-        event.preventDefault()
+            event.preventDefault()
 
 
 $(document).ready ->

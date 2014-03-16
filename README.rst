@@ -1,5 +1,5 @@
 ============================================
-Chaing Mai Restaurants for Students Analysis
+Chiang Mai Restaurants for Students Analysis
 ============================================
 
 GIS Analyse Steps

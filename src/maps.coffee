@@ -13,7 +13,7 @@ icon = (star=null) ->
         if star?
             'chst=d_map_xpin_icon&chld=pin_star|restaurant|0ff|ff0'
         else
-            'chst=d_map_pin_icon&chld=restaurant|ac0'
+            'chst=d_map_pin_icon&chld=restaurant|4d0'
 
 
 class CustomOverlay
@@ -83,12 +83,12 @@ overlays =
     restaurants:  new CustomOverlay({t: 'restaurants'})
     obstacles:    new CustomOverlay({t: 'obstacles'}, '#333')
     universities: new CustomOverlay({t: 'universities'}, '#009')
-    search:       new CustomOverlay(null, '#0aa', '#a0a', true)
+    search:       new CustomOverlay(null, '#7E07A9', '#ECFC00', true)
 
 heatmaps =
-    land_rates:   new CustomOverlay({t: 'land_rates'}, '#0a0', '#aa0')
-    rest_density: new CustomOverlay({t: 'rest_density'}, '#900')
-    univ_density: new CustomOverlay({t: 'univ_density'}, '#00a')
+    land_rates:   new CustomOverlay({t: 'land_rates'}, '#04819E', '#FF7F00')
+    rest_density: new CustomOverlay({t: 'rest_density'}, '#0ACF00')
+    univ_density: new CustomOverlay({t: 'univ_density'}, '#1826B0')
 
 
 google.maps.event.addDomListener window, 'load', ->

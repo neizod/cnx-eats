@@ -83,12 +83,12 @@ overlays =
     restaurants:  new CustomOverlay({t: 'restaurants'})
     obstacles:    new CustomOverlay({t: 'obstacles'}, '#333')
     universities: new CustomOverlay({t: 'universities'}, '#009')
-    search:       new CustomOverlay(null, '#7E07A9', '#ECFC00', true)
+    search:       new CustomOverlay(null, '#7E06A9', '#ECFC00', true)
 
 heatmaps =
     land_rates:   new CustomOverlay({t: 'land_rates'}, '#04819E', '#FF7F00')
     rest_density: new CustomOverlay({t: 'rest_density'}, '#0ACF00')
-    univ_density: new CustomOverlay({t: 'univ_density'}, '#1826B0')
+    univ_density: new CustomOverlay({t: 'univ_density'}, '#1524B0')
 
 
 google.maps.event.addDomListener window, 'load', ->

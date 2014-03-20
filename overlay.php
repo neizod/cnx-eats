@@ -91,7 +91,9 @@ switch ($_GET['t']) {
                 't' => 'table name to query',
             ),
             'optional_arguments' => array(
-                'n' => 'search by name',
+                'namelike' => 'search where name alike',
+                'lower' => 'density lower bound',
+                'upper' => 'density upper bound',
             ),
         )));
     default:

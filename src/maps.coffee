@@ -1,3 +1,6 @@
+---
+---
+
 map = null
 info_window = new google.maps.InfoWindow()
 

@@ -1,3 +1,7 @@
+SHELL = /bin/bash
+
 main:
-	coffee -c maps.coffee
-	mv maps.js ..
+	coffee -cs < <(tail -n +4 maps.coffee) > maps.js
+
+clean:
+	rm -f maps.js
